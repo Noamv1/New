@@ -1,29 +1,30 @@
-from flask import Flask, render_template, request
+// game.js
 
-app = Flask(__name__)
+class Game {
+  constructor(name, creator) {
+    this.name = name;
+    this.creator = creator;
+    this.players = [];
+  }
 
-games = []
+  addPlayer(player) {
+    this.players.push(player);
+  }
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+  removePlayer(player) {
+    const index = this.players.indexOf(player);
+    if (index !== -1) {
+      this.players.splice(index, 1);
+    }
+  }
 
-@app.route('/create', methods=['GET', 'POST'])
-def create_game():
-    if request.method == 'POST':
-        game_name = request.form['game_name']
-        game_description = request.form['game_description']
-        game = {
-            'name': game_name,
-            'description': game_description
-        }
-        games.append(game)
-        return render_template('success.html', game=game)
-    return render_template('create.html')
+  start() {
+    console.log(`Starting game ${this.name} created by ${this.creator}`);
+  }
 
-@app.route('/games')
-def view_games():
-    return render_template('games.html', games=games)
+  stop() {
+    console.log(`Stopping game ${this.name}`);
+  }
+}
 
-if __name__ == '__main__':
-    app.run()
+module.exports = Game;
