@@ -1,0 +1,29 @@
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+games = []
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/create', methods=['GET', 'POST'])
+def create_game():
+    if request.method == 'POST':
+        game_name = request.form['game_name']
+        game_description = request.form['game_description']
+        game = {
+            'name': game_name,
+            'description': game_description
+        }
+        games.append(game)
+        return render_template('success.html', game=game)
+    return render_template('create.html')
+
+@app.route('/games')
+def view_games():
+    return render_template('games.html', games=games)
+
+if __name__ == '__main__':
+    app.run()
